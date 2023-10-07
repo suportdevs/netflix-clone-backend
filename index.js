@@ -5,6 +5,7 @@ const dotEnv = require('dotenv');
 const dbConnection = require('./db/connection');
 const authRouter = require('./routes/auth');
 const userRouter = require("./routes/user");
+const movieRouter = require("./routes/movie");
 
 const app = express();
 dotEnv.config();
@@ -14,6 +15,7 @@ dbConnection();
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
+app.use('/api/movie', movieRouter);
 app.use('/', (req, res) => {
     res.send('working');
 });
