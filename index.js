@@ -15,7 +15,7 @@ dbConnection();
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
-app.use('/api/movie', movieRouter);
+app.use('/api/movies', movieRouter);
 app.use('/', (req, res) => {
     res.send('working');
 });
