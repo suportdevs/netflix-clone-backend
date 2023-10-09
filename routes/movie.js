@@ -1,9 +1,10 @@
-const { verify } = require('jsonwebtoken');
+
 const router = require('express').Router();
 const Movie = require("../models/Movie");
+const authenticated = require('../utilies/authenticated');
 
 
-router.post('/', verify, async (req, res) => {
+router.post('/', authenticated, async (req, res) => {
     if(req.user.role === 'Admin'){
         const movie = new Movie(req.body);
         try{
@@ -17,7 +18,7 @@ router.post('/', verify, async (req, res) => {
     }
 })
 
-router.put('/:id', verify, async (req, res) => {
+router.put('/:id', authenticated, async (req, res) => {
     if(req.user.role === 'Admin'){
         try{
             const movie = await Movie.findByIdAndUpdate(req.params.id, {
@@ -32,7 +33,7 @@ router.put('/:id', verify, async (req, res) => {
     }
 })
 
-router.delete('/:id', verify, async (req, res) => {
+router.delete('/:id', authenticated, async (req, res) => {
     if(req.user.role === 'Admin'){
         try{
             await Movie.findByIdAndDelete(req.params.id);
@@ -45,7 +46,7 @@ router.delete('/:id', verify, async (req, res) => {
     }
 })
 
-router.get('/find/:id', verify, async (req, res) => {
+router.get('/find/:id', authenticated, async (req, res) => {
         try{
             const movie = await Movie.findById(req.params.id);
             return res.status(200).json(movie);
@@ -54,7 +55,7 @@ router.get('/find/:id', verify, async (req, res) => {
         }
 })
 
-router.get('/random', verify, async (req, res) => {
+router.get('/random', authenticated, async (req, res) => {
     const type = req.params.type;
         try{
             const movie = await Movie.aggregate([
@@ -68,7 +69,7 @@ router.get('/random', verify, async (req, res) => {
 })
 
 
-router.get('/', verify, async (req, res) => {
+router.get('/', authenticated, async (req, res) => {
     if(req.user.role === 'Admin'){
         try{
             const movies = await Movie.find();
