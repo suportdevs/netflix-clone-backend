@@ -1,5 +1,6 @@
 const express = require('express');
 const dotEnv = require('dotenv');
+const cors = require('cors');
 
 // external imports
 const dbConnection = require('./db/connection');
@@ -11,6 +12,7 @@ const listRouter = require("./routes/list");
 const app = express();
 dotEnv.config();
 app.use(express.json());
+app.use(cors());
 // database connection
 dbConnection();
 
