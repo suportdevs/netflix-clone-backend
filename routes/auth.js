@@ -21,8 +21,8 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try{
         const user = await User.findOne({email: req.body.email});
-        if(!user)return res.status(401).json("User not found!");
-        const accessToken = await jwt.sign({id: user._id, username: user.username, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: "1d"});
+        if(!user) return res.status(401).json("User not found!");
+        const accessToken = jwt.sign({id: user._id, username: user.username, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: "1d"});
         const {password, ...info} = user._doc;
         return res.status(200).json({info, accessToken});
     }catch(err){
