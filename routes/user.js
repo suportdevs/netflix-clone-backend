@@ -67,7 +67,7 @@ router.get('/stats', authenticated, async (req, res) => {
     try{
         const data = await User.aggregate([
             {$project: {
-                month: {$year: "$createdAt"},
+                month: {$month: "$createdAt"},
             }},
             {
                 $group: {
