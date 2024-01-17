@@ -5,8 +5,9 @@ function authenticated(req, res, next){
     
     if(authHeader){
         const token = authHeader.split(" ")[1];
+        if(!token) return res.status(403).json("Token is not Valid!");
         jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-            if(err)res.status(403).json("Token is not Valid!");
+            if(err)return res.status(403).json("Token is not Valid!");
             req.user = user;
             next();
         })
