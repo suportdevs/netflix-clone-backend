@@ -21,10 +21,15 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try{
         const user = await User.findOne({email: req.body.email});
-        if(!user) return res.status(401).json("User not found!");
+        if(!user) return res.status(401).send({message: "User not found!"});
+        const match = await bcrypt.compare(req.body.password, user.password);
+        if(!match) return res.status(400).send({
+            message: "Passwords do not match!"
+          });
+
         const accessToken = jwt.sign({id: user._id, username: user.username, email: user.email, role: user.role}, process.env.JWT_SECRET, {expiresIn: "1d"});
         const {password, ...info} = user._doc;
-        return res.status(200).json({info, accessToken});
+        return res.status(200).json({info, accessToken, message: "Authentication successfull"});
     }catch(err){
         return res.status(500).send(err);
     }
